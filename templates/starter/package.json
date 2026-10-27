@@ -1,0 +1,26 @@
+{
+  "name": "webhookwidget-starter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A Webhook Widget endpoint on Cloudflare Workers: your data, on your iPhone's Home Screen",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "webhookwidget": "^0.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "wrangler": "^4.153.0"
+  },
+  "cloudflare": {
+    "bindings": {
+      "WIDGET_TOKEN": {
+        "description": "A long random string, such as the output of `openssl rand -hex 24`. The app sends it with every request and the Worker answers nobody else. Keep a copy: it goes into the QR code you scan to add the widget."
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+# The secret the app sends with every request. For local development, copy this file to
+# .dev.vars and put your own value here; for a deployed Worker, set it with
+# `npx wrangler secret put WIDGET_TOKEN`. The Worker refuses to run with this placeholder.
+WIDGET_TOKEN=replace-with-a-long-random-string

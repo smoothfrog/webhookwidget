@@ -1,0 +1,75 @@
+{
+  "about": "Setup links the webhookwidget package writes, and the fields the app must read back out of each. Run by this package's tests and by RegistrationLinkConformanceTests in the app.",
+  "cases": [
+    {
+      "description": "An address and nothing else",
+      "hook": {
+        "name": "Hello",
+        "url": "https://webhookwidget.com/demo/hello"
+      },
+      "link": "webhookwidget://register?name=Hello&url=https%3A%2F%2Fwebhookwidget.com%2Fdemo%2Fhello"
+    },
+    {
+      "description": "A name with spaces and an ampersand, and an address with its own query string",
+      "hook": {
+        "name": "Kitchen & co",
+        "url": "https://example.com/w?team=a&name=Lee"
+      },
+      "link": "webhookwidget://register?name=Kitchen%20%26%20co&url=https%3A%2F%2Fexample.com%2Fw%3Fteam%3Da%26name%3DLee"
+    },
+    {
+      "description": "Characters encodeURIComponent leaves alone, and non-ASCII",
+      "hook": {
+        "name": "Owen's (test)! ☕️ café",
+        "url": "https://example.com/feed"
+      },
+      "link": "webhookwidget://register?name=Owen's%20(test)!%20%E2%98%95%EF%B8%8F%20caf%C3%A9&url=https%3A%2F%2Fexample.com%2Ffeed"
+    },
+    {
+      "description": "A bearer token made of every character that could end a parameter early",
+      "hook": {
+        "name": "Rota",
+        "url": "https://example.com/rota",
+        "auth": {
+          "type": "bearer",
+          "token": "tok en/+=&#?%"
+        }
+      },
+      "link": "webhookwidget://register?name=Rota&url=https%3A%2F%2Fexample.com%2Frota&auth=bearer&secret=tok%20en%2F%2B%3D%26%23%3F%25"
+    },
+    {
+      "description": "Basic auth, with an email for the username",
+      "hook": {
+        "name": "Status",
+        "url": "https://status.example.com/widget",
+        "auth": {
+          "type": "basic",
+          "username": "u@example.com",
+          "password": "p:ss w&rd"
+        }
+      },
+      "link": "webhookwidget://register?name=Status&url=https%3A%2F%2Fstatus.example.com%2Fwidget&auth=basic&username=u%40example.com&secret=p%3Ass%20w%26rd"
+    },
+    {
+      "description": "A custom header",
+      "hook": {
+        "name": "Sales",
+        "url": "https://api.example.com/w?view=today",
+        "auth": {
+          "type": "header",
+          "name": "X-API-Key",
+          "value": "k=1&2"
+        }
+      },
+      "link": "webhookwidget://register?name=Sales&url=https%3A%2F%2Fapi.example.com%2Fw%3Fview%3Dtoday&auth=header&header=X-API-Key&secret=k%3D1%262"
+    },
+    {
+      "description": "A credential in the address needs no auth",
+      "hook": {
+        "name": "Keyed",
+        "url": "https://user:pa55@example.com/w?key=abc"
+      },
+      "link": "webhookwidget://register?name=Keyed&url=https%3A%2F%2Fuser%3Apa55%40example.com%2Fw%3Fkey%3Dabc"
+    }
+  ]
+}
