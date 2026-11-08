@@ -1,0 +1,45 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: Package on Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # The oldest the package's engines field promises, and the ones in use.
+        node: [18, 20, 22, 24]
+    defaults:
+      run:
+        working-directory: packages/webhookwidget
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - name: Types, links, QR codes and the CLI
+        run: npm test
+
+  starter:
+    name: Starter type-checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: templates/starter
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      # The starter has no lockfile, like the copy Cloudflare makes of it, so this installs what
+      # a new deploy would get.
+      - run: npm install --no-audit --no-fund
+      - run: npm run check

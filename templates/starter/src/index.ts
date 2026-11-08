@@ -21,9 +21,11 @@ const PLACEHOLDER = "replace-with-a-long-random-string";
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     if (!env.WIDGET_TOKEN || env.WIDGET_TOKEN === PLACEHOLDER) {
-      return new Response("Set WIDGET_TOKEN to a secret of your own: npx wrangler secret put WIDGET_TOKEN\n", {
-        status: 500,
-      });
+      return new Response(
+        "Set WIDGET_TOKEN to a secret of your own: in .dev.vars for `npm run dev`, or with\n" +
+          "`npx wrangler secret put WIDGET_TOKEN` for the deployed Worker.\n",
+        { status: 500 },
+      );
     }
     if (!(await authorized(request, env.WIDGET_TOKEN))) {
       return new Response("Unauthorized\n", { status: 401, headers: { "WWW-Authenticate": "Bearer" } });
@@ -63,7 +65,7 @@ function payload(widget: WidgetRequest, now: Date): Payload {
     refresh: 900,
     accessibility: `${day.greeting}. ${day.date}.`,
     // Where a tap goes. Point it at your own dashboard.
-    url: "https://webhookwidget.com/docs/",
+    url: "https://webhookwidget.com/docs/quickstart/",
     view: view(widget, day, now),
   };
 }

@@ -1,9 +1,12 @@
 {
   "name": "webhookwidget",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Types and links for Webhook Widget, which turns any JSON endpoint into an iPhone widget, plus a CLI for setup QR codes and previews",
-  "keywords": ["webhook widget", "ios widget", "widgetkit", "home screen", "qr code", "cloudflare workers"],
-  "homepage": "https://webhookwidget.com/docs/",
+  "keywords": [
+    "webhook widget", "widget", "iphone", "ios", "ios widget", "widgetkit", "home screen", "lock screen",
+    "json", "webhook", "dashboard", "qr code", "cloudflare workers", "typescript"
+  ],
+  "homepage": "https://webhookwidget.com/docs/quickstart/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smoothfrog/webhookwidget.git",
@@ -13,6 +16,8 @@
   "license": "MIT",
   "author": "Smooth Frog Ltd <support@webhookwidget.com>",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

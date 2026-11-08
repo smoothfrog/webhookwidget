@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Help with the app or a purchase
+    url: https://webhookwidget.com/contact/
+    about: Email support for anything about your account with Apple, a purchase or the app itself.
+  - name: Docs and the payload reference
+    url: https://webhookwidget.com/docs/quickstart/
+    about: How the format works, with a live playground.

@@ -33,7 +33,7 @@ A credential already in the URL (?key=..., or https://user:pass@host/) needs no 
 
 The link and the QR code carry the secret. Keep them out of chats, issues, commits and logs.
 
-Docs: https://webhookwidget.com/docs/   Agents: https://webhookwidget.com/llms.txt`;
+Docs: https://webhookwidget.com/docs/quickstart/   Agents: https://webhookwidget.com/llms.txt`;
 
 /** A failure the message fully explains: printed without a stack trace. */
 class CliError extends Error {}
@@ -79,6 +79,11 @@ async function main(argv: string[]): Promise<void> {
     return;
   }
   if (!(command in COMMANDS)) throw new CliError(`Unknown command "${command}". Run webhookwidget --help.`);
+  // `webhookwidget qr --help` is what most people try first.
+  if (rest.includes("--help") || rest.includes("-h")) {
+    console.log(HELP);
+    return;
+  }
 
   const name = command as keyof typeof COMMANDS;
   let parsed;
@@ -150,8 +155,8 @@ function qr(hook: Hook, values: Values): void {
   const link = registerLink(hook);
   const png = text(values, "png");
   const svg = text(values, "svg");
-  if (png) writeFileSync(png, qrPng(link));
-  if (svg) writeFileSync(svg, qrSvg(link));
+  if (png) write(png, qrPng(link));
+  if (svg) write(svg, qrSvg(link));
   if (!png && !svg) {
     console.log(qrTerminal(link, process.stdout.isTTY === true && !process.env.NO_COLOR));
   }
@@ -163,6 +168,14 @@ function qr(hook: Hook, values: Values): void {
   );
 }
 
+function write(file: string, data: string | Uint8Array): void {
+  try {
+    writeFileSync(file, data);
+  } catch (error) {
+    throw new CliError(`Couldn't write ${file}: ${(error as Error).message}`);
+  }
+}
+
 /** The slot sizes of the playground's default device, sent as the app would send its own. */
 const SLOTS = {
   systemSmall: [158, 158],
@@ -172,6 +185,10 @@ const SLOTS = {
 
 async function preview(positionals: string[], values: Values): Promise<void> {
   if (positionals.length > 1) throw new CliError("preview takes one payload: a file, a URL, or - for stdin.");
+  // With nothing piped in, reading stdin would wait silently for input that never comes.
+  if (positionals.length === 0 && process.stdin.isTTY) {
+    throw new CliError("preview needs a payload: a JSON file, a URL, or - to read stdin. Run webhookwidget --help.");
+  }
   const source = positionals[0] ?? "-";
 
   const family = text(values, "family") ?? "medium";
@@ -260,7 +277,12 @@ async function fetchPayload(
   try {
     response = await fetch(url, { headers, redirect: "follow", signal: AbortSignal.timeout(10_000) });
   } catch (error) {
-    throw new CliError(`Couldn't fetch ${url.origin}${url.pathname}: ${(error as Error).message}`);
+    // fetch only says "fetch failed"; what went wrong (a typo in the host, a local server
+    // that isn't running) is in its cause.
+    const cause = (error as Error & { cause?: { code?: string; message?: string } }).cause;
+    const reason = cause?.message || cause?.code || (error as Error).message;
+    const hint = cause?.code === "ECONNREFUSED" ? " Is the server running?" : "";
+    throw new CliError(`Couldn't fetch ${url.origin}${url.pathname}: ${reason}.${hint}`);
   }
   if (!response.ok) {
     const hint = response.status === 401 || response.status === 403 ? " Check --auth and --secret-env." : "";
@@ -269,7 +291,17 @@ async function fetchPayload(
   if (response.headers.get("content-type")?.startsWith("image/")) {
     throw new CliError("That endpoint answered with an image (bitmap mode). The playground draws JSON payloads only.");
   }
-  return response.text();
+  const body = await response.text();
+  if (response.headers.get("content-type")?.includes("text/html")) {
+    try {
+      JSON.parse(body);
+    } catch {
+      throw new CliError(
+        `${url.origin}${url.pathname} answered with a web page, not JSON. Is that the endpoint's address (and port)?`,
+      );
+    }
+  }
+  return body;
 }
 
 function open(link: string): void {

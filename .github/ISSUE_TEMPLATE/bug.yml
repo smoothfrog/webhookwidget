@@ -1,0 +1,26 @@
+name: Bug report
+description: Something in the npm package, the CLI, the starter or a widget doesn't work as described.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Never paste a token, a password, a setup link or a QR code here.** They carry the
+        secret. Replace it with `<secret>`.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce it
+      description: The command you ran, or the payload your endpoint returns (secrets removed).
+      render: shell
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: "`npx webhookwidget --version`, and for the app: Settings → General → About for iOS, and the app's version."
+      placeholder: "webhookwidget 0.1.1, Node 22, iOS 26.2, app 1.0"

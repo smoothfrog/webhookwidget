@@ -26,8 +26,8 @@ npx wrangler deploy
 
 ## 2. Put it on your phone
 
-The app needs the Worker's address and the token. Make a QR code with both and scan it with
-the iPhone camera. The token is read from an environment variable, so it stays out of your
+Install [Webhook Widget](https://webhookwidget.com) on your iPhone first. The app needs the
+Worker's address and the token. Make a QR code with both and scan it with the iPhone camera. The token is read from an environment variable, so it stays out of your
 shell history:
 
 ```sh

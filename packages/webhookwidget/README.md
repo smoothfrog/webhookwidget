@@ -4,6 +4,10 @@
 server returns the whole layout (stacks, grids, text, live timers, gauges, symbols and images),
 and the app draws it on the Home Screen and Lock Screen.
 
+You need the app, on an iPhone or iPad with iOS 26.2 or later: [webhookwidget.com](https://webhookwidget.com).
+Your own widgets are free for 7 days, then a one-time purchase, with no subscription. Widgets
+someone shares with you are always free.
+
 This package has two parts:
 
 - **Types** for the payload, so a widget that type-checks is one the app accepts, and helpers

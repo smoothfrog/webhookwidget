@@ -41,6 +41,14 @@ test("prints help with no command, and the version", () => {
   assert.match(run(["--version"]).out, /^\d+\.\d+\.\d+$/);
 });
 
+test("prints help after a command too", () => {
+  for (const args of [["qr", "--help"], ["link", "-h"], ["preview", "--family", "small", "--help"]]) {
+    const result = run(args);
+    assert.equal(result.code, 0, result.err);
+    assert.match(result.out, /webhookwidget qr/);
+  }
+});
+
 test("link prints the setup link, and warns when it carries a secret", () => {
   const plain = run(["link", "--name", "Hello", "--url", "https://webhookwidget.com/demo/hello"]);
   assert.equal(plain.code, 0);
@@ -85,6 +93,13 @@ test("qr writes files, and never prints the secret itself", () => {
   assert.match(readFileSync(svg, "utf8"), /^<svg/);
   assert.doesNotMatch(result.out + result.err, /super-secret-token/);
   assert.match(result.err, /contains the secret/);
+});
+
+test("qr says plainly when it can't write the file", () => {
+  const result = run(["qr", "--name", "R", "--url", "https://e.com/", "--png", join(dir, "missing", "code.png")]);
+  assert.equal(result.code, 1);
+  assert.match(result.err, /^webhookwidget: Couldn't write .*code\.png/);
+  assert.doesNotMatch(result.err, /\n\s+at /);
 });
 
 test("qr draws in the terminal when no file is asked for", () => {
@@ -150,4 +165,23 @@ test("preview fetches a URL the way the app does, credentials and all", async ()
   } finally {
     server.close();
   }
+});
+
+test("preview says why a fetch failed, and when the answer is a web page", async () => {
+  const server = createServer((_, response) => {
+    response.writeHead(200, { "content-type": "text/html; charset=utf-8" }).end("<!DOCTYPE html><title>Hi</title>");
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const port = server.address().port;
+  try {
+    const html = await runAsync(["preview", `http://127.0.0.1:${port}/`]);
+    assert.equal(html.code, 1);
+    assert.match(html.err, /web page, not JSON/);
+  } finally {
+    await new Promise((resolve) => server.close(resolve));
+  }
+  // The same port, now that nothing is listening on it.
+  const refused = await runAsync(["preview", `http://127.0.0.1:${port}/`]);
+  assert.equal(refused.code, 1);
+  assert.match(refused.err, /ECONNREFUSED.*Is the server running\?/);
 });
