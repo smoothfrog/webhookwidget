@@ -1,6 +1,6 @@
 {
   "name": "webhookwidget",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Types and links for Webhook Widget, which turns any JSON endpoint into an iPhone widget, plus a CLI for setup QR codes and previews",
   "keywords": [
     "webhook widget", "widget", "iphone", "ios", "ios widget", "widgetkit", "home screen", "lock screen",

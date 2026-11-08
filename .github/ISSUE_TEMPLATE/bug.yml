@@ -23,4 +23,4 @@ body:
     attributes:
       label: Versions
       description: "`npx webhookwidget --version`, and for the app: Settings → General → About for iOS, and the app's version."
-      placeholder: "webhookwidget 0.1.1, Node 22, iOS 26.2, app 1.0"
+      placeholder: "webhookwidget 0.1.2, Node 22, iOS 26.2, app 1.0"

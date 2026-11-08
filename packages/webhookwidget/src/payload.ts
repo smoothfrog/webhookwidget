@@ -7,6 +7,8 @@
  * anything else that calls `JSON.stringify`.
  */
 
+import type { Family } from "./request.js";
+
 /** Colours that adapt to light, dark and the tinted Home Screen by themselves. */
 export type SemanticColor =
   | "primary" | "secondary" | "tertiary" | "accent"
@@ -282,6 +284,12 @@ interface Envelope {
   accessibility?: string;
   /** Opened when the widget is tapped: a web address or another app's link. */
   url?: string;
+  /**
+   * The size you designed the widget for. The app previews it at this size and names it
+   * when it shows how to add the widget; on the Home Screen it draws at whatever size was
+   * placed. Hold this to the `family` of each request if you lay sizes out differently.
+   */
+  preferredFamily?: Family;
 }
 
 /** A single `view`, or a timeline of up to 60 `entries` at least five minutes apart. */
