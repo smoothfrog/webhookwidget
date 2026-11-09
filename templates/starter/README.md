@@ -1,15 +1,16 @@
 # Webhook Widget starter for Cloudflare Workers
 
-A [Webhook Widget](https://webhookwidget.com) endpoint you can deploy in one click: a Worker
-that answers the app with a widget, and nobody else. It greets you, shows how far through the
-day you are, and lists what your phone sent with the request. Replace that with your own data.
+A [Webhook Widget](https://webhookwidget.com) endpoint that you can deploy in one click. It is
+a Worker that returns a widget to the app and refuses a request that does not have the token.
+The widget greets you, shows how much of the day has passed, and lists what your phone sent
+with the request. Replace that with your own data.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/smoothfrog/webhookwidget/tree/main/templates/starter)
 
 ## 1. Deploy it
 
 Press the button. Cloudflare copies this template into a repository of your own, builds it,
-and asks for one secret, `WIDGET_TOKEN`. Make it long and random, and keep a copy:
+and asks for one secret, `WIDGET_TOKEN`. Make the token long and random, and keep a copy:
 
 ```sh
 openssl rand -hex 24
@@ -27,8 +28,9 @@ npx wrangler deploy
 ## 2. Put it on your phone
 
 Install [Webhook Widget](https://webhookwidget.com) on your iPhone first. The app needs the
-Worker's address and the token. Make a QR code with both and scan it with the iPhone camera. The token is read from an environment variable, so it stays out of your
-shell history:
+Worker's address and the token. Make a QR code with both and scan it with the iPhone camera.
+The command reads the token from an environment variable, so the token is not in your shell
+history:
 
 ```sh
 read -rs WIDGET_TOKEN && export WIDGET_TOKEN    # paste the token, then press return
@@ -41,7 +43,7 @@ widget to your Home Screen. The QR code contains the token, so don't share a scr
 
 ## 3. Make it yours
 
-Everything the widget shows is built in `payload()` in [`src/index.ts`](src/index.ts). Fetch
+`payload()` in [`src/index.ts`](src/index.ts) builds everything the widget shows. Fetch
 your own data there (an API, a database, another Worker) and return it as a widget. The
 `webhookwidget` package's types check the payload as you write it, and
 [the schema](https://webhookwidget.com/docs/schema/) shows every node.
@@ -54,11 +56,11 @@ npm run dev
 npx webhookwidget preview http://localhost:8787/ --family small --auth bearer --secret-env WIDGET_TOKEN --open
 ```
 
-That opens the playground, which draws the widget with the same engine as the app. Then
-`npm run deploy`, and the phone picks it up at its next refresh.
+The last command opens the playground, which draws the widget with the same engine as the app.
+Then run `npm run deploy`. The widget shows the change at its next refresh.
 
-Using an agent? Point it at [webhookwidget.com/llms.txt](https://webhookwidget.com/llms.txt)
-and this README. `preview --headless` gives it a render to check its own work against.
+If you use an agent, give it [webhookwidget.com/llms.txt](https://webhookwidget.com/llms.txt)
+and this README. The agent can check its work against the render from `preview --headless`.
 
 ## What's in it
 

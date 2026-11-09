@@ -5,18 +5,19 @@ server returns the whole layout (stacks, grids, text, live timers, gauges, symbo
 and the app draws it on the Home Screen and Lock Screen.
 
 You need the app, on an iPhone or iPad with iOS 26.2 or later: [webhookwidget.com](https://webhookwidget.com).
-Your own widgets are free for 7 days, then a one-time purchase, with no subscription. Widgets
-someone shares with you are always free.
+Your own widgets are free for 7 days. After that, they need a one-time purchase. There is no
+subscription. Widgets someone shares with you are always free.
 
 This package has two parts:
 
-- **Types** for the payload, so a widget that type-checks is one the app accepts, and helpers
-  for the request the app sends.
-- **A CLI**, `npx webhookwidget`, that turns an endpoint into a QR code to scan with the iPhone
-  camera, and turns a payload into a playground link that draws it with the app's own engine.
+- **Types** for the payload, and helpers for the request the app sends. A payload that
+  type-checks is a payload the app accepts.
+- **A CLI**, `npx webhookwidget`. It makes a QR code for an endpoint, which you scan with the
+  iPhone camera. It also makes a playground link for a payload. The playground draws the payload
+  with the app's engine.
 
-Want a working endpoint first? The [Cloudflare Workers starter](https://github.com/smoothfrog/webhookwidget/tree/main/templates/starter)
-deploys one in a click.
+If you want a working endpoint first, the [Cloudflare Workers starter](https://github.com/smoothfrog/webhookwidget/tree/main/templates/starter)
+deploys one in one click.
 
 ## The CLI
 
@@ -37,13 +38,13 @@ npx webhookwidget preview payload.json --family small --open
 npx webhookwidget preview https://example.com/widget --auth bearer --secret-env WIDGET_TOKEN
 ```
 
-`preview --headless` gives the screenshot version: the widget alone on a wallpaper. The page's
-title becomes `preview-ready` once it has drawn. That is the link for an agent checking its own
-work. `npx webhookwidget --help` lists every option.
+`preview --headless` makes a link for screenshots. The page shows only the widget on a
+wallpaper. The page's title becomes `preview-ready` when the widget is drawn. An agent can use
+this link to check its work. `npx webhookwidget --help` lists every option.
 
-A setup link opens the app's hook editor with everything filled in, and nothing is saved until
-the person taps Save. **The link and the QR code carry the secret**, so keep them out of chats,
-issues, commits and logs.
+A setup link opens the app's hook editor with every field filled in. The app saves nothing until
+the person taps Save. **The link and the QR code contain the secret.** Do not put them in chats,
+issues, commits or logs.
 
 ## The types
 
@@ -72,7 +73,7 @@ export default {
 };
 ```
 
-`satisfies Payload` checks the payload and keeps its literal types; a misspelled node type,
+`satisfies Payload` checks the payload and keeps its literal types. A misspelled node type,
 colour or field fails to compile instead of failing on the phone. Dates can be `Date` objects:
 `JSON.stringify` writes them in the ISO 8601 form the app reads.
 
@@ -83,14 +84,14 @@ colour or field fails to compile instead of failing on the phone. Dates can be `
 | `registerLink(hook)` | The `webhookwidget://register?…` setup link for a hook: name, `https` URL and optional bearer, basic or header auth. |
 | `previewLink(payload, options)` | A playground link. Everything is in the fragment, which browsers never send to a server. |
 
-The library itself has no dependencies and runs anywhere: Workers, Node, Deno, Bun or a
+The library has no dependencies. It runs on Workers, Node, Deno and Bun, and in a
 browser. The CLI needs Node 18.3 or later.
 
 ## For agents
 
-[webhookwidget.com/llms.txt](https://webhookwidget.com/llms.txt) is the format, the good
-practice, and the build loop in one page: write the endpoint, check it with
-`preview --headless`, then hand the person `qr` output to scan.
+[webhookwidget.com/llms.txt](https://webhookwidget.com/llms.txt) describes the format, good
+practice and the build steps on one page. The steps are: write the endpoint, check it with
+`preview --headless`, then give the person the `qr` output to scan.
 
 ## Licence
 

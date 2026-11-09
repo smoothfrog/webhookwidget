@@ -3,14 +3,14 @@
 ![Four Webhook Widget widgets, drawn from JSON: a launch countdown, AI spend against a budget, bus departures and a shop's rota](.github/social-preview.png)
 
 [Webhook Widget](https://webhookwidget.com) turns any JSON endpoint into an iPhone widget. Your
-server returns the whole layout, and the app draws it on the Home Screen and Lock Screen: no
-Xcode, no developer account, no account at all.
+server returns the whole layout, and the app draws it on the Home Screen and Lock Screen. You
+do not need Xcode, a developer account or an account of any kind.
 
 You need the app, on an iPhone or iPad with iOS 26.2 or later: [webhookwidget.com](https://webhookwidget.com).
-Your own widgets are free for 7 days, then a one-time purchase, with no subscription. Widgets
-someone shares with you are always free.
+Your own widgets are free for 7 days. After that, they need a one-time purchase. There is no
+subscription. Widgets someone shares with you are always free.
 
-This repository is the developer side:
+This repository contains the developer tools:
 
 | | |
 | --- | --- |
@@ -19,22 +19,24 @@ This repository is the developer side:
 
 ## Try one first
 
-No server needed: open the app, tap Add Hook and pick one of the examples under "Or try some
-examples". They're served by webhookwidget.com and work on your Home Screen with no trial.
+You do not need a server for this. Open the app, tap Add Hook and pick one of the examples
+under "Or try some examples". webhookwidget.com serves the examples, and they work on your Home
+Screen without the trial.
 
-To check the QR path from your terminal as well, scan this with the iPhone camera and tap
-Save. A hook saved from a setup link is your own, so its widget runs on the trial or Premium:
+To test a setup QR code from your terminal, run the command below. Scan the code with the
+iPhone camera and tap Save. A hook saved from a setup link is your own hook, so its widget needs
+the trial or Premium.
 
 ```sh
 npx webhookwidget qr --name "Hello" --url https://webhookwidget.com/demo/hello
 ```
 
-## From nothing to a widget
+## Make your own widget
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/smoothfrog/webhookwidget/tree/main/templates/starter)
 
-1. Deploy the starter, and choose a token when Cloudflare asks for `WIDGET_TOKEN`.
-2. Make a QR code for it and scan it with the iPhone camera:
+1. Deploy the starter. When Cloudflare asks for `WIDGET_TOKEN`, choose a token.
+2. Make a QR code for the endpoint. Scan the code with the iPhone camera.
 
    ```sh
    read -rs WIDGET_TOKEN && export WIDGET_TOKEN
@@ -42,11 +44,11 @@ npx webhookwidget qr --name "Hello" --url https://webhookwidget.com/demo/hello
      --auth bearer --secret-env WIDGET_TOKEN
    ```
 
-3. Tap Save in the app. Then put it on your Home Screen: touch and hold the Home Screen, tap
-   Edit, then Add Widget, search for Webhook Widget and add one. Touch and hold the new widget,
-   tap Edit Widget, and choose your hook.
+3. Tap Save in the app. Then put the widget on your Home Screen. Touch and hold the Home
+   Screen. Tap Edit, then Add Widget. Search for Webhook Widget and add one. Touch and hold the
+   new widget, tap Edit Widget, and choose your hook.
 
-Then make it show your own data: [the starter's README](templates/starter#3-make-it-yours).
+To show your own data, see [the starter's README](templates/starter#3-make-it-yours).
 
 ## Docs
 
