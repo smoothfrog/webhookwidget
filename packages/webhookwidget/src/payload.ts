@@ -67,7 +67,26 @@ export interface Modifiers {
   priority?: number;
   /** Keeps the node legible on a tinted Home Screen. */
   accentable?: boolean;
+  /**
+   * Makes the node a button. `"refresh"` fetches your endpoint again and redraws the widget.
+   * A URL opens that URL. The node looks the same: draw the button with `bg`, `corner` and
+   * `padding`. Revision 2. An app on revision 1 ignores it.
+   */
+  tap?: Tap;
+  /**
+   * Draws the node only in one state of a widget that refreshes on a tap. `"refreshing"`
+   * draws it from the tap until the new response is drawn. `"idle"` draws it the rest of the
+   * time. The node keeps its place in the layout in both states, so put the two versions of
+   * something in a `zstack` to swap them. Revision 2. An app on revision 1 always draws it.
+   */
+  when?: "refreshing" | "idle";
 }
+
+/**
+ * What a tap does. `"refresh"` fetches your endpoint again and redraws the widget, and
+ * opens nothing. Any other value is a URL to open: a web address or another app's link.
+ */
+export type Tap = "refresh" | (string & {});
 
 /**
  * Text fields a container hands down to every text, timer and symbol inside it, as its
@@ -284,6 +303,13 @@ interface Envelope {
   accessibility?: string;
   /** Opened when the widget is tapped: a web address or another app's link. */
   url?: string;
+  /**
+   * What a tap on the widget does, in place of opening `url`. `"refresh"` fetches your
+   * endpoint again and redraws the widget. iOS does not count that fetch against the
+   * widget's daily refresh budget. Revision 2. An app on revision 1 ignores `tap` and opens
+   * `url`, so you can send both.
+   */
+  tap?: Tap;
   /**
    * The size you designed the widget for. The app previews it at this size and names it
    * when it shows how to add the widget; on the Home Screen it draws at whatever size was

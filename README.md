@@ -53,6 +53,7 @@ To show your own data, see [the starter's README](templates/starter#3-make-it-yo
 ## Docs
 
 - [Quickstart](https://webhookwidget.com/docs/quickstart/) and [the node reference](https://webhookwidget.com/docs/schema/)
+- [Taps and buttons](https://webhookwidget.com/docs/taps/): refresh a widget on a tap, and draw buttons
 - [The playground](https://webhookwidget.com/playground/), which draws a payload with the app's engine
 - [llms.txt](https://webhookwidget.com/llms.txt), for coding agents
 - [Worked examples](https://webhookwidget.com/examples/), each served live at `webhookwidget.com/demo/<id>`

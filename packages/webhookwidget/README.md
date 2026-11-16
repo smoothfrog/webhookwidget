@@ -13,8 +13,8 @@ This package has two parts:
 - **Types** for the payload, and helpers for the request the app sends. A payload that
   type-checks is a payload the app accepts.
 - **A CLI**, `npx webhookwidget`. It makes a QR code for an endpoint, which you scan with the
-  iPhone camera. It also makes a playground link for a payload. The playground draws the payload
-  with the app's engine.
+  iPhone camera or with Scan QR Code in the app. It also makes a playground link for a payload.
+  The playground draws the payload with the app's engine.
 
 If you want a working endpoint first, the [Cloudflare Workers starter](https://github.com/smoothfrog/webhookwidget/tree/main/templates/starter)
 deploys one in one click.
@@ -80,9 +80,62 @@ colour or field fails to compile instead of failing on the phone. Dates can be `
 | Export | What it is |
 | --- | --- |
 | `Payload`, `Node`, `Entry` and every node type | The response format. Reference: [webhookwidget.com/docs/schema](https://webhookwidget.com/docs/schema/) |
-| `readRequest(request)` | The widget's `family`, slot size, `scheme`, `locale`, `timeZone` and protocol version from the query string the app sends. Every field is absent when the request didn't come from the app. |
+| `readRequest(request)` | The widget's `family`, slot size, `scheme`, `locale`, `timeZone`, protocol `version` and `revision` from the query string the app sends. Every field is absent when the request didn't come from the app. |
 | `registerLink(hook)` | The `webhookwidget://register?…` setup link for a hook: name, `https` URL and optional bearer, basic or header auth. |
 | `previewLink(payload, options)` | A playground link. Everything is in the fragment, which browsers never send to a server. |
+
+### Taps and buttons
+
+A tap on the widget opens the payload's `url`. `tap` and `when` change that. Both need version
+1.1 of the app, which sends revision 2.
+
+```ts
+import { readRequest, type Node, type Payload } from "webhookwidget";
+
+const { revision = 1 } = readRequest(request);
+
+// Two lines in one place. The app draws one of them, by the state of the widget.
+const status: Node = {
+  type: "zstack",
+  align: "leading",
+  children: [
+    { type: "text", text: "Tap to refresh", style: "caption", when: "idle" },
+    { type: "text", text: "Refreshing", style: "caption", when: "refreshing" },
+  ],
+};
+
+const payload: Payload = {
+  v: 1,
+  // A tap on the widget fetches your endpoint again.
+  tap: "refresh",
+  // An app on revision 1 ignores `tap` and opens this page.
+  url: "https://example.com/orders",
+  view: {
+    type: "vstack",
+    align: "leading",
+    padding: 16,
+    children: [
+      { type: "text", text: "12 orders", style: "title", weight: "bold" },
+      // An app on revision 1 draws both lines, so send them only to revision 2.
+      ...(revision >= 2 ? [status] : []),
+    ],
+  },
+};
+```
+
+- `tap: "refresh"` fetches your endpoint again and redraws the widget. It opens nothing. Any
+  other value is a URL to open, with the same rule as `url`.
+- On the payload, `tap` sets what a tap on the widget does. An app on revision 1 ignores it and
+  opens `url`, so you can send both.
+- On a node, `tap` makes the node a button. It does not change the size or the appearance of
+  the node. Draw the button with `bg`, `corner` and `padding`. An app on revision 1 draws the
+  node and ignores its `tap`, so check `revision` before you send a button.
+- `when` draws a node only while the widget refreshes (`"refreshing"`), or only while it does
+  not (`"idle"`). The node keeps its place in the layout in both states. An app on revision 1
+  always draws the node, so check `revision` before you send it.
+- iOS does not count a refresh that follows a tap against the widget's daily refresh budget.
+
+Reference: [taps and buttons](https://webhookwidget.com/docs/taps/).
 
 The library has no dependencies. It runs on Workers, Node, Deno and Bun, and in a
 browser. The CLI needs Node 18.3 or later.

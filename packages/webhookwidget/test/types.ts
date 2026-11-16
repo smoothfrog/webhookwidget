@@ -73,6 +73,21 @@ export const both: Payload = { v: 1, view: { type: "spacer" }, entries: [] };
 // @ts-expect-error There is no version 2 yet.
 export const future: Payload = { v: 2, view: { type: "spacer" } };
 
+export const taps: Payload = {
+  v: 1,
+  tap: "refresh",
+  url: "https://example.com/",
+  view: {
+    type: "zstack",
+    children: [
+      { type: "symbol", name: "arrow.clockwise", when: "idle" },
+      { type: "symbol", name: "hourglass", when: "refreshing" },
+      { type: "text", text: "Open", bg: "blue", corner: 8, padding: 8, tap: "https://example.com/open" },
+      { type: "text", text: "Refresh", tap: "refresh" },
+    ],
+  },
+};
+
 export const wrong: Node[] = [
   // @ts-expect-error Not a node type.
   { type: "button" },
@@ -96,4 +111,6 @@ export const wrong: Node[] = [
   { type: "spacer", w: "auto" },
   // @ts-expect-error A symbol needs a name.
   { type: "symbol" },
+  // @ts-expect-error A node is drawn while "refreshing" or while "idle".
+  { type: "text", text: "a", when: "loading" },
 ];
