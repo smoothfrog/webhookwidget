@@ -1,6 +1,6 @@
 # Webhook Widget
 
-![Four Webhook Widget widgets, drawn from JSON: a launch countdown, AI spend against a budget, bus departures and a shop's rota](.github/social-preview.png)
+![Four Webhook Widget widgets, drawn from JSON: a launch countdown, AI spend against a budget, bus departures and server health](.github/social-preview.png)
 
 [Webhook Widget](https://webhookwidget.com) turns any JSON endpoint into an iPhone widget. Your
 server returns the whole layout, and the app draws it on the Home Screen and Lock Screen. You
@@ -53,7 +53,8 @@ To show your own data, see [the starter's README](templates/starter#3-make-it-yo
 ## Docs
 
 - [Quickstart](https://webhookwidget.com/docs/quickstart/) and [the node reference](https://webhookwidget.com/docs/schema/)
-- [Taps and buttons](https://webhookwidget.com/docs/taps/): refresh a widget on a tap, and draw buttons
+- [Make a widget interactive](https://webhookwidget.com/docs/taps/): refresh a widget on a tap, and add buttons
+- [Keep a widget's data fresh](https://webhookwidget.com/docs/timelines/): timeline entries, timers and the fetch interval
 - [The playground](https://webhookwidget.com/playground/), which draws a payload with the app's engine
 - [llms.txt](https://webhookwidget.com/llms.txt), for coding agents
 - [Worked examples](https://webhookwidget.com/examples/), each served live at `webhookwidget.com/demo/<id>`

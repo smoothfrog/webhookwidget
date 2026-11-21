@@ -43,7 +43,7 @@ wallpaper. The page's title becomes `preview-ready` when the widget is drawn. An
 this link to check its work. `npx webhookwidget --help` lists every option.
 
 A setup link opens the app's hook editor with every field filled in. The app saves nothing until
-the person taps Save. **The link and the QR code contain the secret.** Do not put them in chats,
+you tap Save. **The link and the QR code contain the secret.** Do not put them in chats,
 issues, commits or logs.
 
 ## The types
@@ -84,10 +84,11 @@ colour or field fails to compile instead of failing on the phone. Dates can be `
 | `registerLink(hook)` | The `webhookwidget://register?…` setup link for a hook: name, `https` URL and optional bearer, basic or header auth. |
 | `previewLink(payload, options)` | A playground link. Everything is in the fragment, which browsers never send to a server. |
 
-### Taps and buttons
+### Refresh on a tap and add buttons
 
-A tap on the widget opens the payload's `url`. `tap` and `when` change that. Both need version
-1.1 of the app, which sends revision 2.
+Available since: app 1.1, protocol `rev=2`
+
+A tap on the widget opens the payload's `url`. Set `tap` and `when` to change that.
 
 ```ts
 import { readRequest, type Node, type Payload } from "webhookwidget";
@@ -135,7 +136,7 @@ const payload: Payload = {
   always draws the node, so check `revision` before you send it.
 - iOS does not count a refresh that follows a tap against the widget's daily refresh budget.
 
-Reference: [taps and buttons](https://webhookwidget.com/docs/taps/).
+Reference: [make a widget interactive](https://webhookwidget.com/docs/taps/).
 
 The library has no dependencies. It runs on Workers, Node, Deno and Bun, and in a
 browser. The CLI needs Node 18.3 or later.
