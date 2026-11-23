@@ -9,10 +9,11 @@ with the request. Replace that with your own data.
 
 ## 1. Deploy it
 
-Press the button. Cloudflare copies this template into a repository of your own, enables its
-`*.workers.dev` URL, and pre-fills one secret, `WIDGET_TOKEN` — the **Bearer token** the app sends
-with every request.
+Press the button. Cloudflare copies this template into a repository of your own, builds it, and
+pre-fills one secret, `WIDGET_TOKEN` — the **Bearer token** the app sends with every request.
 
+- If Cloudflare doesn't enable a `*.workers.dev` URL automatically, turn it on under
+  **Worker → Settings → Domains & Routes → Enable `workers.dev`**.
 - Leave `WIDGET_TOKEN` as **`foobar`** to deploy and try it right away.
 - Before showing private data, replace it with a long random string and treat it like a password:
   in the Cloudflare dashboard under **Worker → Settings → Variables and Secrets → Edit secret
