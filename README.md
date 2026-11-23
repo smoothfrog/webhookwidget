@@ -35,8 +35,13 @@ npx webhookwidget qr --name "Hello" --url https://webhookwidget.com/demo/hello
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/smoothfrog/webhookwidget/tree/main/templates/starter)
 
-1. Deploy the starter. When Cloudflare asks for `WIDGET_TOKEN`, choose a token.
-2. Make a QR code for the endpoint. Scan the code with the iPhone camera.
+1. Deploy the starter. `WIDGET_TOKEN` is the **Bearer token** the app sends — leave it as the
+   default `foobar` to try it right away, and harden it with a long random string (treat it like a
+   password) before showing private data under **Worker → Settings → Variables and Secrets → Edit
+   secret `WIDGET_TOKEN`**. Opening your new `*.workers.dev` URL in a browser shows the setup steps
+   too.
+2. Add the endpoint in the app (**Add Hook** → paste your URL → **Authentication: Bearer token** →
+   your token), or make a QR code and scan it with the iPhone camera:
 
    ```sh
    read -rs WIDGET_TOKEN && export WIDGET_TOKEN

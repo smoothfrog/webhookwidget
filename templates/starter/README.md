@@ -9,12 +9,17 @@ with the request. Replace that with your own data.
 
 ## 1. Deploy it
 
-Press the button. Cloudflare copies this template into a repository of your own, builds it,
-and asks for one secret, `WIDGET_TOKEN`. Make the token long and random, and keep a copy:
+Press the button. Cloudflare copies this template into a repository of your own, enables its
+`*.workers.dev` URL, and pre-fills one secret, `WIDGET_TOKEN` — the **Bearer token** the app sends
+with every request.
 
-```sh
-openssl rand -hex 24
-```
+- Leave `WIDGET_TOKEN` as **`foobar`** to deploy and try it right away.
+- Before showing private data, replace it with a long random string and treat it like a password:
+  in the Cloudflare dashboard under **Worker → Settings → Variables and Secrets → Edit secret
+  `WIDGET_TOKEN`**, or with `npx wrangler secret put WIDGET_TOKEN`.
+
+Opening your deployed `https://my-widget.<your-subdomain>.workers.dev/` URL in a browser also
+shows these setup steps (including the default token if you haven't changed it yet).
 
 Or start from the command line instead:
 
@@ -28,12 +33,18 @@ npx wrangler deploy
 ## 2. Put it on your phone
 
 Install [Webhook Widget](https://webhookwidget.com) on your iPhone first. The app needs the
-Worker's address and the token. Make a QR code with both and scan it with the iPhone camera.
-The command reads the token from an environment variable, so the token is not in your shell
-history:
+Worker's address and **Bearer token** authentication (`WIDGET_TOKEN`, which defaults to `foobar`).
+
+**In the app:** tap **Add Hook**, paste `https://my-widget.<your-subdomain>.workers.dev/`, set
+**Authentication** to **Bearer token**, and enter your `WIDGET_TOKEN` (`foobar` by default). Or
+open your `*.workers.dev` URL on your iPhone and tap **Open in Webhook Widget** while using the
+default token.
+
+**Or scan a QR code from your terminal** (reads the token from an environment variable so it stays
+out of your shell history):
 
 ```sh
-read -rs WIDGET_TOKEN && export WIDGET_TOKEN    # paste the token, then press return
+read -rs WIDGET_TOKEN && export WIDGET_TOKEN    # paste the token (or foobar), then press return
 npx webhookwidget qr --name "My widget" --url https://my-widget.<your-subdomain>.workers.dev/ \
   --auth bearer --secret-env WIDGET_TOKEN
 ```
@@ -68,4 +79,4 @@ and this README. The agent can check its work against the render from `preview -
 | --- | --- |
 | `src/index.ts` | Checks the token, reads the widget's size and the phone's time zone, and returns a payload for each size: small, medium, large and the three Lock Screen slots. |
 | `wrangler.jsonc` | The Worker's name and settings. Rename `my-widget` to change its address. |
-| `.dev.vars.example` | The token, for local development. The Worker refuses to run with its placeholder. |
+| `.dev.vars.example` | Default token (`foobar`) for local development. Change `WIDGET_TOKEN` before serving private data. |

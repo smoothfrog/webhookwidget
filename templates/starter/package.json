@@ -19,7 +19,7 @@
   "cloudflare": {
     "bindings": {
       "WIDGET_TOKEN": {
-        "description": "A long random string, such as the output of `openssl rand -hex 24`. The app sends it with every request and the Worker answers nobody else. Keep a copy: it goes into the QR code you scan to add the widget."
+        "description": "The Bearer token Webhook Widget sends with every request. Leave as \"foobar\" to try it right away; before showing private data, replace it with a long random string and treat it like a password (Worker -> Settings -> Variables and Secrets -> Edit WIDGET_TOKEN)."
       }
     }
   }

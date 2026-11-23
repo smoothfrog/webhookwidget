@@ -3,5 +3,6 @@
   "name": "my-widget",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-01",
+  "workers_dev": true,
   "observability": { "enabled": true }
 }
